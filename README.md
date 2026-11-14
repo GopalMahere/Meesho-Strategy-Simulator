@@ -141,7 +141,7 @@ python test_financial_model.py
 # Run the frontend DOM linkage verifier
 python validate_frontend.py
 ```
-* **Result**: **100% DOM ID coverage**. Verifies all JavaScript DOM hooks exist in `index.html` with zero broken references.
+* **Result**: **100% DOM ID coverage**. Verifies all 83 JavaScript DOM hooks exist across 110 unique IDs in `index.html` with zero broken references.
 
 ```powershell
 # Rebuild the financial workbook from pure code
