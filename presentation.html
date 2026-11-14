@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Executive Slide Deck: Meesho Commercial Strategy & Growth Decision Simulator</title>
+  <style>
+    :root {
+      --navy: #0D1F3C;
+      --navy-light: #1A365D;
+      --teal: #00A896;
+      --teal-light: #E6F7F5;
+      --slate: #4A5568;
+      --slate-light: #F7FAFC;
+      --border: #E2E8F0;
+      --red: #E63946;
+      --green: #2A9D8F;
+      --amber: #F4A261;
+      --white: #FFFFFF;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: #081224;
+      color: #2D3748;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Top Control Bar */
+    .top-bar {
+      background: var(--navy);
+      color: #FFF;
+      padding: 12px 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--teal);
+    }
+
+    .top-bar-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .deck-tag {
+      background: var(--teal);
+      color: #FFF;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .deck-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #E2E8F0;
+    }
+
+    .top-bar-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .slide-counter {
+      font-size: 13px;
+      font-weight: 700;
+      color: #CBD5E0;
+    }
+
+    .nav-btn {
+      background: rgba(255, 255, 255, 0.15);
+      color: #FFF;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      padding: 6px 14px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .nav-btn:hover {
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    /* Deck Viewport */
+    .deck-viewport {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+      position: relative;
+    }
+
+    .slide-container {
+      width: 100%;
+      max-width: 1200px;
+      height: 640px;
+      background: #FFFFFF;
+      border-radius: 12px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .slide-container.active {
+      display: flex;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Slide Header */
+    .slide-header {
+      padding: 24px 36px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .slide-headline h2 {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: -0.01em;
+    }
+
+    .slide-headline p {
+      font-size: 13px;
+      color: var(--slate);
+      margin-top: 3px;
+    }
+
+    .slide-meta {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--teal);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Slide Body */
+    .slide-body {
+      flex: 1;
+      padding: 28px 36px;
+      overflow-y: auto;
+    }
+
+    /* Slide Footer */
+    .slide-footer {
+      padding: 12px 36px;
+      background: var(--slate-light);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11px;
+      color: #A0AEC0;
+    }
+
+    /* Content Layouts */
+    .grid-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      height: 100%;
+    }
+
+    .grid-3col {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+    }
+
+    .grid-4col {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .consulting-card {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    }
+
+    .consulting-card h3 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .consulting-card p, .consulting-card li {
+      font-size: 13px;
+      color: #4A5568;
+      line-height: 1.6;
+    }
+
+    .consulting-card ul {
+      padding-left: 20px;
+      margin-top: 8px;
+    }
+
+    .metric-hero {
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: -0.02em;
+      margin: 8px 0;
+    }
+
+    .metric-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .metric-badge.red { background: #FDE8E8; color: var(--red); }
+    .metric-badge.green { background: #D1E7DD; color: var(--green); }
+    .metric-badge.teal { background: var(--teal-light); color: var(--teal); }
+    .metric-badge.amber { background: #FEF3C7; color: #B45309; }
+
+    .callout-box {
+      background: var(--teal-light);
+      border-left: 4px solid var(--teal);
+      padding: 14px 18px;
+      border-radius: 0 6px 6px 0;
+      font-size: 13px;
+      color: #2D3748;
+      margin-top: 16px;
+    }
+
+    .table-clean {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      text-align: right;
+    }
+
+    .table-clean th, .table-clean td {
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+    }
+
+    .table-clean th {
+      background: var(--navy);
+      color: #FFF;
+      text-align: center;
+    }
+
+    .table-clean td:first-child {
+      text-align: left;
+      font-weight: 600;
+    }
+
+    /* Slide 1 Hero */
+    .hero-slide {
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+      color: #FFFFFF;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 60px;
+      height: 100%;
+    }
+
+    .hero-slide h1 {
+      font-size: 38px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 12px;
+      color: #FFFFFF;
+    }
+
+    .hero-slide h3 {
+      font-size: 18px;
+      color: var(--teal);
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+
+    .hero-slide p {
+      font-size: 14px;
+      color: #CBD5E0;
+      max-width: 780px;
+      line-height: 1.6;
+    }
+
+    .hero-tags {
+      display: flex;
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    .hero-tag-item {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* Slide Progress Bar */
+    .progress-bar-container {
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      position: absolute;
+      bottom: 0;
+      left: 0;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--teal);
+      width: 8.33%;
+      transition: width 0.3s ease;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <div class="top-bar-left">
+      <span class="deck-tag">Strategy Deck</span>
+      <span class="deck-title">Project BharatPulse: Meesho Commercial Growth & Unit Economics Simulator</span>
+    </div>
+    <div class="top-bar-right">
+      <span class="slide-counter" id="slideCounter">Slide 1 / 12</span>
+      <button class="nav-btn" id="btnPrev">◀ Previous</button>
+      <button class="nav-btn" id="btnNext">Next ▶</button>
+    </div>
+  </div>
+
+  <!-- Deck Viewport -->
+  <div class="deck-viewport">
+
+    <!-- Slide 1: Title -->
+    <div class="slide-container active" id="slide-1">
+      <div class="hero-slide">
+        <span class="deck-tag" style="margin-bottom: 16px;">Executive Decision Brief</span>
+        <h1>Project BharatPulse</h1>
+        <h3>Solving the Commercial Growth & Profitability Paradox for Meesho</h3>
+        <p>A formula-driven commercial decision-support architecture evaluating unit contribution margins (CM3), buyer platform fee elasticity, Valmo in-house logistics, and supplier ad monetization.</p>
+        <div class="hero-tags">
+          <span class="hero-tag-item">Audited 10-Sheet Financial Model</span>
+          <span class="hero-tag-item">Zero-Dependency Interactive Simulator</span>
+          <span class="hero-tag-item">Myntra & Meesho PM / BizOps Blueprint</span>
+        </div>
+      </div>
+      <div class="progress-bar-container"><div class="progress-bar" style="width: 8.33%;"></div></div>
+    </div>
+
+    <!-- Slide 2: The Core Strategic Dilemma -->
+    <div class="slide-container" id="slide-2">
+      <div class="slide-header">
+        <div class="slide-headline">
+          <h2>The Growth vs Profitability Trap in Mass E-Commerce</h2>
+          <p>Status Quo Bleed: Explosive top-line volume is constrained by negative unit contribution margins.</p>
+        </div>
+        <div class="slide-meta">Diagnosis & Baseline</div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3col">
+          <div class="consulting-card">
+            <span class="metric-badge teal">Scale Milestone</span>
+            <div class="metric-hero">120M</div>
+            <p><strong>Monthly Placed Orders</strong> (~1.44B annual run-rate). Meesho commands undisputed leadership in non-metro Bharat apparel and home goods [1-VPF].</p>
+          </div>
+          <div class="consulting-card">
+            <span class="metric-badge red">The Friction</span>
+            <div class="metric-hero">-₹1.12</div>
+            <p><strong>Contribution Margin 3 (CM3)</strong> per order. At 120M monthly orders, Meesho bleeds <strong>-₹13.45 Cr / mo (-₹161.4 Cr annually)</strong> [1-VPF].</p>
+          </div>
+          <div class="consulting-card">
+            <span class="metric-badge amber">Structural Traps</span>
+            <div class="metric-hero">24.5%</div>
+            <p><strong>Baseline RTO Rate</strong>. High Cash-on-Delivery (72%) and low AOV (₹310) magnify reverse shipping losses, consuming 16% of platform take [2-CSE].</p>
+          </div>
+        </div>
+        <div class="callout-box" style="margin-top: 24px;">
+          <strong>Strategic Takeaway:</strong> Scale alone will not organically fix negative CM3. Because seller commissions are zero, Meesho must engineer monetization or compress freight friction without triggering volume churn.
+        </div>
+      </div>
+      <div class="slide-footer"><span>Meesho Commercial Strategy Simulator</span><span>Slide 2 / 12</span></div>
+      <div class="progress-bar-container"><div class="progress-bar" style="width: 16.66%;"></div></div>
+    </div>
+
+    <!-- Slide 3: MECE Issue Tree -->
+    <div class="slide-container" id="slide-3">
+      <div class="slide-header">
+        <div class="slide-headline">
+          <h2>MECE Issue Tree: Deconstructing the -₹1.12 Deficit</h2>
+          <p>Mutually Exclusive, Collectively Exhaustive Root-Cause Breakdown</p>
+        </div>
+        <div class="slide-meta">Problem Structuring</div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2col">
+          <div class="consulting-card">
+            <h3>Branch 1: Revenue Expansion Levers</h3>
+            <ul>
+              <li><strong>1.1 Buyer Platform Convenience Fee:</strong> Introduce ₹5 to ₹10 checkout fee.
+                <br><em>Risk:</em> Tests price elasticity ($E_d = -1.45$). High churn risk in Bharat cohorts.
+              </li>
+              <li style="margin-top: 12px;"><strong>1.2 Seller Ad Take-Rate Expansion:</strong> Scale sponsored product ads from 1.85% to 3.25% of GMV.
+                <br><em>Risk:</em> 2-month seller adoption lag and 18% attribution cannibalization.
+              </li>
+            </ul>
+          </div>
+          <div class="consulting-card">
+            <h3>Branch 2: Logistics & Friction Compression</h3>
+            <ul>
+              <li><strong>2.1 In-House 3PL Network (Valmo):</strong> Expand micro-entrepreneur delivery network.
+                <br><em>Benefit:</em> Drops forward shipping from ₹42 to ₹37.50 (-₹4.50 saving).
+              </li>
+              <li style="margin-top: 12px;"><strong>2.2 AI-Driven Pre-Dispatch COD Verification:</strong> ML intent scoring & automated NDR IVR.
+                <br><em>Benefit:</em> Compresses RTO from 24.5% to 17.5% (-700 bps reverse freight savings).
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="callout-box">
+          <strong>Consulting Insight:</strong> Monetization (Branch 1) carries high churn risk, while Logistics (Branch 2) requires upfront CapEx and operational ramp-up time.
+        </div>
+      </div>
+      <div class="slide-footer"><span>Meesho Commercial Strategy Simulator</span><span>Slide 3 / 12</span></div>
+      <div class="progress-bar-container"><div class="progress-bar" style="width: 25.0%;"></div></div>
+    </div>
+
+    <!-- Slide 4: Unit Economics Anatomy -->
+    <div class="slide-container" id="slide-4">
+      <div class="slide-header">
+        <div class="slide-headline">
+          <h2>Baseline Unit Economics: Where Does the Money Go?</h2>
+          <p>Audited Waterfall Breakdown on ₹310 Average Order Value</p>
+        </div>
+        <div class="slide-meta">Unit Economics</div>
+      </div>
+      <div class="slide-body">
+        <table class="table-clean">
+          <thead>
+            <tr>
+              <th>P&L Line Item</th>
+              <th>Per Order (₹)</th>
+              <th>% of GMV</th>
+              <th>Commercial Classification & Benchmark Note</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Gross Merchandise Value (AOV)</td><td>₹310.00</td><td>100.0%</td><td>Mass-market Bharat unbranded apparel basket [1-VPF]</td></tr>
+            <tr><td>Sponsored Ad Revenue (1.85% Take)</td><td>₹5.74</td><td>1.85%</td><td>Monetization from seller bids on search & discovery [1-VPF]</td></tr>
+            <tr><td>Logistics Billing Fee</td><td>₹46.50</td><td>15.00%</td><td>Standard freight fee billed on checkout [1-VPF]</td></tr>
+            <tr style="background:#F7FAFC;font-weight:700;"><td>Total Net Platform Revenue</td><td>₹52.24</td><td>16.85%</td><td>Net cash entering Meesho platform per order</td></tr>
+            <tr><td>Payment Gateway & CS Operations</td><td>(₹3.72)</td><td>-1.20%</td><td>UPI/Card friction (₹0.62) + BPO dispute resolution (₹3.10)</td></tr>
+            <tr style="background:#F7FAFC;font-weight:700;"><td>Contribution Margin 1 (CM1)</td><td>₹48.52</td><td>15.65%</td><td>Gross operational margin before fulfillment freight</td></tr>
+            <tr><td>Delivered Forward Freight (75.5%)</td><td>(₹31.71)</td><td>-10.23%</td><td>3PL commercial surface shipping @ ₹42.00 / deliv order</td></tr>
+            <tr><td>Reverse RTO Logistics Loss (24.5%)</td><td>(₹8.33)</td><td>-2.69%</td><td>Failed delivery freight & inspection loss @ ₹34.00</td></tr>
+            <tr style="background:#F7FAFC;font-weight:700;"><td>Contribution Margin 2 (CM2)</td><td>₹8.48</td><td>2.74%</td><td>Post-fulfillment logistics margin pool</td></tr>
+            <tr><td>Marketing, Promotion & Retention</td><td>(₹9.60)</td><td>-3.10%</td><td>Direct acquisition mktg (₹7.50) + loyalty retention (₹2.10)</td></tr>
+            <tr style="background:#FDE8E8;font-weight:800;color:#E63946;"><td>Contribution Margin 3 (CM3 Net)</td><td>-₹1.12</td><td>-0.36%</td><td>STATUS QUO NET BLEED PER PLACED ORDER</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="slide-footer"><span>Meesho Commercial Strategy Simulator</span><span>Slide 4 / 12</span></div>
+      <div class="progress-bar-container"><div class="progress-bar" style="width: 33.33%;"></div></div>
+    </div>
+
+    <!-- Slide 5: Strategic Lever 1 -->
+    <div class="slide-container" id="slide-5">
+      <div class="slide-header">
+        <div class="slide-headline">
+          <h2>Lever 1: Buyer Platform Fee & Bharat Elasticity Risk</h2>
+          <p>Direct Monetization vs Price Sensitivity in Low-Income Cohorts</p>
+        </div>
+        <div class="slide-meta">Lever 1 Analysis</div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2col">
+          <div class="consulting-card">
+            <h3>The Mechanism & Financial Upside</h3>
+            <p>Introduce a nominal <strong>₹7.00 platform fee</strong> at checkout with an 8% loyalty exemption for high-frequency shoppers.</p>
+            <div class="metric-hero" style="color:var(--green);">+₹5.12</div>
+            <p><strong>Net CM3 per Order</strong> (+₹6.24 delta over baseline). Shifting CM3 from -₹1.12 to +₹5.12 generates instant unit profitability.</p>
+          </div>
+          <div class="consulting-card">
+            <h3>The Hidden Threat: Volume Churn</h3>
+            <p>Price elasticity ($E_d$) in Bharat consumer cohorts is calibrated at <strong>-1.45</strong> [2-CSE].</p>
+            <div class="metric-hero" style="color:var(--red);">-47.1M</div>
+            <p><strong>Annual Placed Orders Lost</strong> (-3.27% monthly churn). Baskets drop from 120M to 116.1M/mo, forfeiting ₹1,460 Cr in annual GMV.</p>
+          </div>
+        </div>
+        <div class="callout-box">
+          <strong>Strategic Assessment:</strong> Highly accretive in the short run, but dangerously exposes Meesho to buyer flight toward Shopsy and Amazon Bazaar. An unhedged national fee rollout is strategically unacceptable.
+        </div>
+      </div>
+      <div class="slide-footer"><span>Meesho Commercial Strategy Simulator</span><span>Slide 5 / 12</span></div>
+      <div class="progress-bar-container"><div class="progress-bar" style="width: 41.66%;"></div></div>
+    </div>
+
+    <!-- Slide 6: Strategic Lever 2 -->
+    <div class="slide-container" id="slide-6">
+      <div class="slide-header">
+        <div class="slide-headline">
+          <h2>Lever 2: Valmo In-House Logistics & AI COD Verification</h2>
+          <p>Compressing Reverse Freight Losses through Decentralized Delivery</p>
+        </div>
+        <div class="slide-meta">Lever 2 Analysis</div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3col">
+          <div class="consulting-card">
+            <span class="metric-badge green">RTO Reduction</span>
+            <div class="metric-hero">-700 bps</div>
+            <p>Compresses RTO rate from <strong>24.5% to 17.5%</strong> via machine learning COD fraud scoring and automated WhatsApp address confirmation.</p>
+          </div>
+          <div class="consulting-card">
+            <span class="metric-badge teal">Forward Savings</span>
+            <div class="metric-hero">₹4.50</div>
+            <p>Lowers forward shipping from <strong>₹42.00 to ₹37.50</strong> per delivered parcel via decentralized micro-entrepreneur sorting depots.</p>
+          </div>
+          <div class="consulting-card">
+            <span class="metric-badge amber">Capital & Payback</span>
+            <div class="metric-hero">1.6 Yrs</div>
+            <p>Upfront CapEx of <strong>₹6.50 Cr</strong> fully amortized over 12 months (₹54.2 Lakhs/mo). Net annual cost savings exceed ₹48 Cr.</p>
+          </div>
+        </div>
+        <div class="callout-box" style="margin-top: 24px;">
+          <strong>Unit Economics Outcome:</strong> Lifts steady-state CM3 from -₹1.12 to <strong>+₹2.88 per order</strong> without dampening organic customer order volume.
+        </div>
+      </div>
+      <div class="slide-footer"><span>Meesho Commercial Strategy Simulator</span><span>Slide 6 / 12</span></div>
+      <div class="progress-bar-container"><div class="progress-bar" style="width: 50.0%;"></div></div>
+    </div>
+
+    <!-- Slide 7: Strategic Lever 3 -->
+    <div class="slide-container" id="slide-7">
+      <div class="slide-header">
+        <div class="slide-headline">
+          <h2>Lever 3: Seller Ad Monetization & Promoted Discovery</h2>
+          <p>Scaling Marketplace Take-Rate Across Unbranded Regional Manufacturers</p>
+        </div>
+        <div class="slide-meta">Lever 3 Analysis</div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2col">
+          <div class="consulting-card">
+            <h3>Ad Expansion Dynamics</h3>
+            <ul>
+              <li><strong>Target Ad Take-Rate:</strong> Scale from 1.85% to <strong>3.25% of GMV</strong> (calibrated against Shopee & Pinduoduo benchmarks).</li>
+              <li><strong>Gross Incremental Take:</strong> Adds +₹4.34 per order in advertising billing.</li>
+              <li><strong>Seller Adoption Curve:</strong> Models a 2-month onboarding lag across cottage manufacturers.</li>
+            </ul>
+          </div>
+          <div class="consulting-card">
+            <h3>Attribution & Cost Adjustments</h3>
+            <ul>
+              <li><strong>18.0% Cannibalization Discount:</strong> Deducts sponsored clicks that merely displaced high-converting organic search rankings.</li>
+              <li><strong>Ad-Tech Platform Opex:</strong> ₹1.80 Cr annualized infrastructure and seller BD ops cost (₹15L/month).</li>
+              <li><strong>Net CM3 Impact:</strong> Lifts CM3 from -₹1.12 to <strong>+₹2.44 per order</strong>.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="callout-box">
+          <strong>Supplier Moat Consideration:</strong> Unlike platform fees, advertising preserves zero-commission optics while empowering high-ROI sellers to bid for discovery.
+        </div>
+      </div>
+      <div class="slide-footer"><span>Meesho Commercial Strategy Simulator</span><span>Slide 7 / 12</span></div>
+      <div class="progress-bar-container"><div class="progress-bar" style="width: 58.33%;"></div></div>
+    </div>
+
+    <!-- Slide 8: Strategic Lever 4 -->
+    <div class="slide-container" id="slide-8">
+      <div class="slide-header">
+        <div class="slide-headline">
+          <h2>Lever 4: Full-Scale Combined Push & Overlap Friction</h2>
+          <p>Concurrent Rollout of Logistics + Ads with 25% Damping Penalty</p>
+        </div>
+        <div class="slide-meta">Lever 4 Analysis</div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3col">
+          <div class="consulting-card">
+            <span class="metric-badge amber">Theoretical Sum</span>
+            <div class="metric-hero">+₹6.44</div>
+            <p>Naive aggregation summing Lever 2 logistics savings (+₹4.00) and Lever 3 ad gains (+₹3.56) without accounting for organizational friction.</p>
+          </div>
+          <div class="consulting-card">
+            <span class="metric-badge red">Enforced Damping</span>
+            <div class="metric-hero">-25.0%</div>
+            <p>Mandatory corporate finance synergy penalty enforcing conservatism against execution bottlenecks and tech bandwidth contention.</p>
+          </div>
+          <div class="consulting-card">
+            <span class="metric-badge green">Audited Result</span>
+            <div class="metric-hero">+₹4.83</div>
+            <p>Net realized CM3 per order. Shifts annual P&L from <strong>-₹161.4 Cr bleed to +₹695 Cr profit</strong> under full national scale.</p>
+          </div>
+        </div>
+        <div class="callout-box" style="margin-top: 24px;">
+          <strong>The Capital Commitment:</strong> Requires <strong>₹8.30 Cr</strong> consolidated upfront capital. High organizational exposure if executed nationally without a pilot.
+        </div>
+      </div>
+      <div class="slide-footer"><span>Meesho Commercial Strategy Simulator</span><span>Slide 8 / 12</span></div>
+      <div class="progress-bar-container"><div class="progress-bar" style="width: 66.66%;"></div></div>
+    </div>
+
+    <!-- Slide 9: The Consulting "Plot Twist" -->
+    <div class="slide-container" id="slide-9">
+      <div class="slide-header">
+        <div class="slide-headline">
+          <h2>The Consulting "Plot Twist": Why Big Bang Year-1 Fails</h2>
+          <p>The Execution Paradox of Ramp Friction & Capital Exposure</p>
+        </div>
+        <div class="slide-meta">Strategic Tension</div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2col">
+          <div class="consulting-card">
+            <h3 style="color:var(--red);">Why Big Bang Rollouts Underperform</h3>
+            <ul>
+              <li><strong>Ramp-Up Friction Lag:</strong> Micro-depot hubs, 3PL contract transitions, and driver onboarding require 4 months of operational stabilization.</li>
+              <li><strong>Lumpy Capital Burden:</strong> In Months 1–3, CapEx amortization precedes volume efficiencies, depressing net cash flows.</li>
+              <li><strong>Irreversible Consumer Pushback:</strong> Introducing checkout fees nationally risks permanent cohort attrition to Shopsy and Amazon Bazaar.</li>
+            </ul>
+          </div>
+          <div class="consulting-card">
+            <h3 style="color:var(--teal);">The Consulting Truth</h3>
+            <p><strong>Do not deploy full-scale capital against unvalidated behavioral elasticity.</strong></p>
+            <p style="margin-top: 12px;">The optimal corporate strategy is not to jump immediately to Lever 4, but to create a <strong>Controlled Regional Option</strong> that limits downside risk while acquiring empirical operational data.</p>
+          </div>
+        </div>
+        <div class="callout-box">
+          <strong>The Real Option Principle:</strong> Information has quantifiable commercial value. Sizing a regional test reduces capital at risk by 73% while preserving 100% of the strategic upside.
+        </div>
+      </div>
+      <div class="slide-footer"><span>Meesho Commercial Strategy Simulator</span><span>Slide 9 / 12</span></div>
+      <div class="progress-bar-container"><div class="progress-bar" style="width: 75.0%;"></div></div>
+    </div>
+
+    <!-- Slide 10: The Winning Recommendation -->
+    <div class="slide-container" id="slide-10">
+      <div class="slide-header">
+        <div class="slide-headline">
+          <h2>The Recommendation: Regional Pilot ("Project BharatPulse")</h2>
+          <p>Controlled Cluster Implementation in Purvanchal (Eastern UP & Bihar)</p>
+        </div>
+        <div class="slide-meta">Executive Recommendation</div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3col">
+          <div class="consulting-card">
+            <span class="metric-badge teal">Ring-Fenced Cluster</span>
+            <div class="metric-hero">10M</div>
+            <p><strong>Monthly Orders</strong> (~8.3% of national volume). High order density with severe baseline friction (78% COD, 26.8% RTO).</p>
+          </div>
+          <div class="consulting-card">
+            <span class="metric-badge green">Capped Capital</span>
+            <div class="metric-hero">₹2.25 Cr</div>
+            <p><strong>Committed Pilot Budget</strong> (only 27% of full Lever 4 budget). Eliminates <strong>₹6.05 Cr of capital downside risk</strong>.</p>
+          </div>
+          <div class="consulting-card">
+            <span class="metric-badge teal">Dual Hurdles</span>
+            <div class="metric-hero">+₹4.50</div>
+            <p><strong>Local Cluster Hurdle</strong> required to break even inside Purvanchal vs +₹2.50 National Portfolio benchmark.</p>
+          </div>
+        </div>
+        <div class="callout-box" style="margin-top: 24px;">
+          <strong>Why BharatPulse Wins:</strong> Delivers <strong>+₹4.82 CM3 / order</strong> in steady state inside the cluster, generating immediate cluster profitability while validating Valmo hub productivity and seller ad willingness.
+        </div>
+      </div>
+      <div class="slide-footer"><span>Meesho Commercial Strategy Simulator</span><span>Slide 10 / 12</span></div>
+      <div class="progress-bar-container"><div class="progress-bar" style="width: 83.33%;"></div></div>
+    </div>
+
+    <!-- Slide 11: Month-6 Decision Gate Matrix -->
+    <div class="slide-container" id="slide-11">
+      <div class="slide-header">
+        <div class="slide-headline">
+          <h2>Disciplined Governance: Month-6 Decision Gate Matrix</h2>
+          <p>Pre-Committed Empirical Thresholds for Scaling, Iterating, or Halting</p>
+        </div>
+        <div class="slide-meta">Governance & Gates</div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-3col">
+          <div class="consulting-card" style="border-top: 4px solid var(--green); background: #F4FAF8;">
+            <span class="metric-badge green">Green (Scale)</span>
+            <h3 style="margin-top: 8px;">Scale Nationally</h3>
+            <p><strong>Mandatory Gates:</strong><br>• CM3 ≥ +₹4.50 / order<br>• RTO Rate ≤ 19.0%<br>• User Churn ≤ 2.5%</p>
+            <p style="margin-top: 8px; font-size: 12px; color: var(--green); font-weight: 700;">Action: Release remaining ₹6.05 Cr; expand across 8 state clusters.</p>
+          </div>
+          <div class="consulting-card" style="border-top: 4px solid var(--amber); background: #FFFBF4;">
+            <span class="metric-badge amber">Amber (Pivot)</span>
+            <h3 style="margin-top: 8px;">Iterate & Refine</h3>
+            <p><strong>Mandatory Gates:</strong><br>• CM3 between +₹1.50 and +₹4.50<br>• RTO between 19.0% and 22.0%</p>
+            <p style="margin-top: 8px; font-size: 12px; color: #B45309; font-weight: 700;">Action: 90-day extension; re-tune COD IVR and ad bidding algorithms.</p>
+          </div>
+          <div class="consulting-card" style="border-top: 4px solid var(--red); background: #FEF6F6;">
+            <span class="metric-badge red">Red (Halt)</span>
+            <h3 style="margin-top: 8px;">Immediate Rollback</h3>
+            <p><strong>Mandatory Gates:</strong><br>• CM3 &lt; +₹1.50 / order<br>• User Churn &gt; 5.5%</p>
+            <p style="margin-top: 8px; font-size: 12px; color: var(--red); font-weight: 700;">Action: Immediate capital freeze; sunset fees; revert volume to 3PLs.</p>
+          </div>
+        </div>
+        <div class="callout-box" style="margin-top: 24px;">
+          <strong>Executive Committee Governance:</strong> Removes emotional bias and ensures that scaling decisions are anchored strictly in empirical data.
+        </div>
+      </div>
+      <div class="slide-footer"><span>Meesho Commercial Strategy Simulator</span><span>Slide 11 / 12</span></div>
+      <div class="progress-bar-container"><div class="progress-bar" style="width: 91.66%;"></div></div>
+    </div>
+
+    <!-- Slide 12: Product Management & BizOps Roadmap -->
+    <div class="slide-container" id="slide-12">
+      <div class="slide-header">
+        <div class="slide-headline">
+          <h2>Product Management & BizOps Execution Roadmap</h2>
+          <p>24-Week Cross-Functional Implementation (Myntra / Meesho PM Framework)</p>
+        </div>
+        <div class="slide-meta">Product Operations</div>
+      </div>
+      <div class="slide-body">
+        <div class="grid-2col">
+          <div class="consulting-card">
+            <h3>Storefront CX & Consumer Funnel (Weeks 1–8)</h3>
+            <ul>
+              <li><strong>Pricing Transparency UI:</strong> Frame checkout fee as "Zero Platform Commission Guarantee" to mitigate elasticity resistance.</li>
+              <li><strong>Dynamic Fee Waiver:</strong> A/B test waiver algorithms on prepaid UPI to actively incentivize COD-to-prepaid conversion.</li>
+              <li><strong>Real-time NDR Verification:</strong> In-app delivery rescheduling prompt prior to rider dispatch.</li>
+            </ul>
+          </div>
+          <div class="consulting-card">
+            <h3>Outbound Supply Chain & Seller AdTech (Weeks 8–24)</h3>
+            <ul>
+              <li><strong>Valmo Micro-Hub Telematics:</strong> Real-time parcel scanning SOPs for rural depot franchise partners.</li>
+              <li><strong>Smart Ad Bidding Engine:</strong> Automated ROAS bidder on Meesho Seller Portal for cottage manufacturers.</li>
+              <li><strong>BizOps Instrumentation:</strong> Daily tracking of CM3 per order, RTO rate, and NDR recovery against Phase 2 Evidence Register.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="callout-box">
+          <strong>Summary for PM Leadership:</strong> "Building what to build and why" requires bridging analytics, supply chain outbound operations, and storefront experimentation into an auditable commercial growth engine.
+        </div>
+      </div>
+      <div class="slide-footer"><span>Meesho Commercial Strategy Simulator</span><span>Slide 12 / 12</span></div>
+      <div class="progress-bar-container"><div class="progress-bar" style="width: 100%;"></div></div>
+    </div>
+
+  </div>
+
+  <script>
+    let currentSlide = 1;
+    const totalSlides = 12;
+
+    const btnPrev = document.getElementById('btnPrev');
+    const btnNext = document.getElementById('btnNext');
+    const slideCounter = document.getElementById('slideCounter');
+
+    function showSlide(n) {
+      if (n < 1) n = 1;
+      if (n > totalSlides) n = totalSlides;
+      currentSlide = n;
+
+      document.querySelectorAll('.slide-container').forEach(el => el.classList.remove('active'));
+      const activeSlide = document.getElementById(`slide-${currentSlide}`);
+      if (activeSlide) activeSlide.classList.add('active');
+
+      slideCounter.textContent = `Slide ${currentSlide} / ${totalSlides}`;
+      btnPrev.disabled = (currentSlide === 1);
+      btnNext.disabled = (currentSlide === totalSlides);
+    }
+
+    btnPrev.addEventListener('click', () => showSlide(currentSlide - 1));
+    btnNext.addEventListener('click', () => showSlide(currentSlide + 1));
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+        showSlide(currentSlide + 1);
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        showSlide(currentSlide - 1);
+      } else if (e.key === 'Home') {
+        showSlide(1);
+      } else if (e.key === 'End') {
+        showSlide(totalSlides);
+      }
+    });
+
+    showSlide(1);
+  </script>
+</body>
+</html>

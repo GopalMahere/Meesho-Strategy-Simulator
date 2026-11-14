@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meesho Commercial Strategy & Growth Decision Simulator</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Chart.js CDN with local fallback compatibility -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- Top App Navigation & Header -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand-section">
+        <h1>
+          Meesho Commercial Decision Platform
+          <span class="badge-brand">Enterprise Strategy</span>
+        </h1>
+        <p>Formula-Driven Unit Economics & Growth Friction Simulator | Fashnear Technologies Case Architecture</p>
+      </div>
+      <div class="header-actions">
+        <a href="presentation.html" class="btn-secondary" id="linkDeck" target="_blank">
+          <span>📊 View Executive Deck (12 Slides)</span>
+        </a>
+        <button class="btn-teal" id="btnExportCsv">
+          <span>📥 Export Simulation CSV</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Macro Scenario Selector Bar -->
+  <section class="scenario-bar">
+    <div class="scenario-bar-inner">
+      <div class="scenario-toggle-group">
+        <span class="scenario-label">Macro Scenario:</span>
+        <button class="scenario-btn" id="btnScenarioDownside">Downside (High Churn / RTO Spike)</button>
+        <button class="scenario-btn active" id="btnScenarioBase">Base Case (Audited FY24 Baseline)</button>
+        <button class="scenario-btn" id="btnScenarioUpside">Upside (Rapid Valmo Adoption)</button>
+      </div>
+      <div class="scenario-actions">
+        <button class="btn-secondary" id="btnResetDefaults" style="color: var(--slate-text); border-color: var(--border-light);">Reset Parameters</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Container -->
+  <main class="main-container">
+    
+    <!-- Real-time KPI Ribbon -->
+    <section class="kpi-ribbon">
+      <div class="kpi-card accent-teal">
+        <div class="kpi-title">Annualized Gross GMV</div>
+        <div class="kpi-value" id="kpiNetGmv">₹44,640 Cr</div>
+        <div class="kpi-meta">120M Monthly Baseline Orders</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Net Platform Revenue</div>
+        <div class="kpi-value" id="kpiNetRevenue">₹626.8 Cr / mo</div>
+        <div class="kpi-meta">Ads + Logistics + Fee Billing</div>
+      </div>
+      <div class="kpi-card accent-red" id="cardBlendedCm3">
+        <div class="kpi-title">Blended CM3 per Order</div>
+        <div class="kpi-value" id="kpiBlendedCm3">-₹1.12</div>
+        <div class="kpi-meta" id="kpiCm3Subtext">Status Quo Net Bleed</div>
+      </div>
+      <div class="kpi-card accent-amber" id="cardTotalCm3">
+        <div class="kpi-title">Annual Net CM3 P&L</div>
+        <div class="kpi-value" id="kpiTotalCm3Cr">-₹161.4 Cr</div>
+        <div class="kpi-meta">Cumulative Year-1 Contribution</div>
+      </div>
+      <div class="kpi-card accent-green">
+        <div class="kpi-title">Effective RTO Rate</div>
+        <div class="kpi-value" id="kpiRtoRate">24.5%</div>
+        <div class="kpi-meta">Reverse Shipping Cost Friction</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-title">Valmo CapEx Payback</div>
+        <div class="kpi-value" id="kpiPayback">1.6 Years</div>
+        <div class="kpi-meta">Annualized Capital Efficiency</div>
+      </div>
+    </section>
+
+    <!-- App Main Grid: Controls + Visualizations -->
+    <div class="app-grid">
+
+      <!-- Left Controls Sidebar -->
+      <aside class="control-sidebar">
+        <div class="sidebar-title">
+          <span>Simulation Levers</span>
+          <span style="font-size: 11px; color: var(--slate-muted); font-weight: 500;">Dynamic Real-time</span>
+        </div>
+
+        <!-- Section 1: Baseline Macro -->
+        <div class="control-section">
+          <span class="section-label">1. Core Baseline Drivers</span>
+          
+          <div class="input-group">
+            <div class="input-header">
+              <span>Average Order Value (AOV)</span>
+              <span class="slider-val" id="valAov">₹310</span>
+            </div>
+            <input type="range" id="sliderAov" min="200" max="450" step="5" value="310">
+          </div>
+
+          <div class="input-group">
+            <div class="input-header">
+              <span>Monthly Orders (National)</span>
+              <span class="slider-val" id="valOrders">120M</span>
+            </div>
+            <input type="range" id="sliderOrders" min="60" max="180" step="5" value="120">
+          </div>
+        </div>
+
+        <!-- Section 2: Lever 1 Platform Fee -->
+        <div class="control-section">
+          <span class="section-label">2. Lever 1: Buyer Platform Fee</span>
+
+          <div class="input-group">
+            <div class="input-header">
+              <span>Checkout Platform Fee</span>
+              <span class="slider-val" id="valPlatformFee">₹7.00</span>
+            </div>
+            <input type="range" id="sliderPlatformFee" min="0" max="15" step="1" value="7">
+          </div>
+
+          <div class="input-group">
+            <div class="input-header">
+              <span>Price Elasticity of Demand (Ed)</span>
+              <span class="slider-val" id="valEd">-1.45</span>
+            </div>
+            <input type="range" id="sliderEd" min="-2.5" max="-0.4" step="0.05" value="-1.45">
+          </div>
+        </div>
+
+        <!-- Section 3: Lever 2 Valmo Logistics -->
+        <div class="control-section">
+          <span class="section-label">3. Lever 2: Valmo Logistics</span>
+
+          <div class="input-group">
+            <div class="input-header">
+              <span>Valmo Upfront CapEx</span>
+              <span class="slider-val" id="valValmoCapex">₹6.5 Cr</span>
+            </div>
+            <input type="range" id="sliderValmoCapex" min="2.0" max="15.0" step="0.5" value="6.5">
+          </div>
+
+          <div class="input-group">
+            <div class="input-header">
+              <span>Target Compressed RTO %</span>
+              <span class="slider-val" id="valRtoTarget">17.5%</span>
+            </div>
+            <input type="range" id="sliderRtoTarget" min="14.0" max="24.5" step="0.5" value="17.5">
+          </div>
+        </div>
+
+        <!-- Section 4: Lever 3 Seller Ads -->
+        <div class="control-section">
+          <span class="section-label">4. Lever 3: Seller Ad Platform</span>
+
+          <div class="input-group">
+            <div class="input-header">
+              <span>Target Ad Take-Rate (% of GMV)</span>
+              <span class="slider-val" id="valAdTakeRate">3.25%</span>
+            </div>
+            <input type="range" id="sliderAdTakeRate" min="1.85" max="4.50" step="0.1" value="3.25">
+          </div>
+
+          <div class="input-group">
+            <div class="input-header">
+              <span>Attribution Cannibalization</span>
+              <span class="slider-val" id="valCannibalization">18.0%</span>
+            </div>
+            <input type="range" id="sliderCannibalization" min="5.0" max="35.0" step="1.0" value="18.0">
+          </div>
+        </div>
+
+        <!-- Section 5: Lever 4 Synergy Penalty -->
+        <div class="control-section">
+          <span class="section-label">5. Lever 4 Synergy Damping</span>
+
+          <div class="input-group">
+            <div class="input-header">
+              <span>Overlap Damping Penalty</span>
+              <span class="slider-val" id="valOverlapDamping">25.0%</span>
+            </div>
+            <input type="range" id="sliderOverlapDamping" min="10.0" max="40.0" step="2.5" value="25.0">
+          </div>
+        </div>
+      </aside>
+
+      <!-- Right Analytics Content Area -->
+      <section class="analytics-content">
+
+        <!-- Tabs Navigation -->
+        <div class="tabs-nav">
+          <button class="tab-btn active" id="tabOverview">1. Executive Overview</button>
+          <button class="tab-btn" id="tabTrajectory">2. 12-Month Trajectory</button>
+          <button class="tab-btn" id="tabWaterfall">3. Unit Economics Bridge</button>
+          <button class="tab-btn" id="tabHeatmaps">4. 2D Sensitivity Heatmaps</button>
+          <button class="tab-btn" id="tabDecisionGate">5. Pilot BharatPulse Gate</button>
+        </div>
+
+        <!-- Tab 1: Executive Overview -->
+        <div class="tab-pane active" id="paneOverview">
+          <div class="content-card">
+            <div class="card-header">
+              <h3 class="card-title">Scenario Comparison: Baseline vs Strategic Levers</h3>
+              <span style="font-size: 12px; color: var(--slate-muted);">Audited Annualized Figures</span>
+            </div>
+            <div class="data-table-wrap">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Commercial Strategy Lever</th>
+                    <th>Annual Orders</th>
+                    <th>Ad Take-Rate</th>
+                    <th>Blended RTO</th>
+                    <th>Net Rev (₹ Cr)</th>
+                    <th>Annual CM3 (₹ Cr)</th>
+                    <th>CM3 / Order</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="tableComparisonBody">
+                  <!-- Dynamically populated by app.js -->
+                </tbody>
+              </table>
+            </div>
+
+            <div class="consulting-callout">
+              <strong>Strategic Insight:</strong> While Lever 1 immediately surges CM3 per order to +₹5.12, it causes an annual loss of <strong>~47.1M orders</strong> due to high price sensitivity (Ed = -1.45) in Bharat cohorts. Controlled Pilot BharatPulse preserves network volume while de-risking Valmo logistics.
+            </div>
+          </div>
+
+          <div class="content-card">
+            <div class="card-header">
+              <h3 class="card-title">Unit Contribution Margin (CM3 / Order) Comparison</h3>
+            </div>
+            <div class="chart-container">
+              <canvas id="chartWaterfall"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 2: 12-Month Trajectory -->
+        <div class="tab-pane" id="paneTrajectory">
+          <div class="content-card">
+            <div class="card-header">
+              <h3 class="card-title">12-Month Net CM3 Run-Rate Trajectory (₹ Crore / Month)</h3>
+              <span style="font-size: 12px; color: var(--slate-muted);">Captures Valmo 4-Month S-Curve & CapEx Amortization</span>
+            </div>
+            <div class="chart-container">
+              <canvas id="chartTrajectory"></canvas>
+            </div>
+            <div class="consulting-callout">
+              <strong>The Ramp Friction Reality:</strong> In Months 1 to 3, Lever 4 shows muted profitability due to driver onboarding and sorting hub integration. Cash flow accelerates substantially by Month 5 onwards.
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 3: Unit Economics Bridge -->
+        <div class="tab-pane" id="paneWaterfall">
+          <div class="content-card">
+            <div class="card-header">
+              <h3 class="card-title">Unit Economics Anatomy: From ₹310 AOV Down to Net CM3</h3>
+              <span style="font-size: 12px; color: var(--slate-muted);">Status Quo Baseline Cascade</span>
+            </div>
+            <div class="chart-container">
+              <canvas id="chartUnitBridge"></canvas>
+            </div>
+            <div class="consulting-callout">
+              <strong>The RTO Freight Drag:</strong> RTO reverse shipping consumes <strong>₹8.33 per order</strong> on the blended book. Reducing RTO from 24.5% to 17.5% through Valmo recovers ₹3.15 per order directly into CM2.
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 4: 2D Sensitivity Heatmaps -->
+        <div class="tab-pane" id="paneHeatmaps">
+          <div class="content-card">
+            <div class="card-header">
+              <h3 class="card-title">Matrix A: Platform Fee (₹) vs Price Elasticity (Ed) on CM3/Order</h3>
+              <span style="font-size: 12px; color: var(--slate-muted);">Values in ₹ per order</span>
+            </div>
+            <div class="data-table-wrap">
+              <table class="heatmap-table">
+                <thead>
+                  <tr>
+                    <th>Fee (₹) \ Elasticity</th>
+                    <th>Ed: -2.20</th>
+                    <th>Ed: -1.80</th>
+                    <th>Ed: -1.45 (Base)</th>
+                    <th>Ed: -1.10</th>
+                    <th>Ed: -0.75</th>
+                    <th>Ed: -0.40</th>
+                  </tr>
+                </thead>
+                <tbody id="heatmapFeeChurnBody">
+                  <!-- Dynamically populated -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="content-card">
+            <div class="card-header">
+              <h3 class="card-title">Matrix B: Valmo CapEx Outlay vs Target Compressed RTO Rate</h3>
+              <span style="font-size: 12px; color: var(--slate-muted);">Net Cumulative Year-1 Benefit (₹ Crore)</span>
+            </div>
+            <div class="data-table-wrap">
+              <table class="heatmap-table">
+                <thead>
+                  <tr>
+                    <th>CapEx (₹ Cr) \ Target RTO</th>
+                    <th>15.0%</th>
+                    <th>17.5% (Base)</th>
+                    <th>20.0%</th>
+                    <th>22.0%</th>
+                    <th>24.5% (No Drop)</th>
+                  </tr>
+                </thead>
+                <tbody id="heatmapCapexRtoBody">
+                  <!-- Dynamically populated -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 5: Pilot BharatPulse Gate -->
+        <div class="tab-pane" id="paneDecisionGate">
+          <div class="content-card">
+            <div class="card-header">
+              <h3 class="card-title">Project BharatPulse: Regional Pilot Decision Gate Matrix</h3>
+              <span style="font-size: 12px; font-weight: 700; color: var(--primary-navy);" id="gateStatusBanner">STATUS: GREEN (SCALE NATIONALLY)</span>
+            </div>
+            <p style="font-size: 13px; color: var(--slate-text); margin-bottom: 16px;">
+              Purvanchal Cluster (Eastern UP & Bihar) | 10M monthly orders | Ring-fenced CapEx: ₹2.25 Cr (27% of L4 commitment).
+            </p>
+
+            <div class="gate-matrix-grid">
+              <div class="gate-card green">
+                <span class="gate-badge green">Green (Scale)</span>
+                <h4>Scale Nationally Across Bharat</h4>
+                <p>Release remaining ₹6.05 Cr budget; scale Valmo micro-depots across Maharashtra, Rajasthan, and MP clusters.</p>
+                <div class="gate-trigger">Threshold: CM3 ≥ +₹4.50 & RTO ≤ 19.0%</div>
+                <div style="margin-top: 10px; font-weight: 700; font-size: 12px;" id="gateCm3Status">Current Pilot CM3: +₹4.82 (PASSED)</div>
+              </div>
+
+              <div class="gate-card amber">
+                <span class="gate-badge amber">Amber (Pivot)</span>
+                <h4>Iterate & Refine Hubs</h4>
+                <p>Extend pilot by 90 days; re-tune COD OTP verification and implement smart ad bid boost incentives.</p>
+                <div class="gate-trigger">Threshold: CM3 between +₹1.50 and +₹4.50</div>
+                <div style="margin-top: 10px; font-weight: 700; font-size: 12px;" id="gateRtoStatus">Current Pilot RTO: 17.5% (PASSED)</div>
+              </div>
+
+              <div class="gate-card red">
+                <span class="gate-badge red">Red (Halt)</span>
+                <h4>Immediate Capital Freeze</h4>
+                <p>Halt expansion immediately; sunset buyer convenience fee; revert to competitive commercial 3PL freight SLAs.</p>
+                <div class="gate-trigger">Threshold: CM3 &lt; +₹1.50 OR Churn &gt; 5.5%</div>
+                <div style="margin-top: 10px; font-weight: 700; font-size: 12px;" id="gateChurnStatus">Current Volume Churn: 0.0% (PASSED)</div>
+              </div>
+            </div>
+
+            <div class="consulting-callout" style="margin-top: 24px;">
+              <strong>Real Option Valuation:</strong> By committing ₹2.25 Cr rather than the full ₹8.30 Cr upfront, Meesho acquires an empirical information option that eliminates <strong>₹6.05 Cr of downside risk</strong> while maintaining identical strategic upside.
+            </div>
+          </div>
+        </div>
+
+      </section>
+    </div>
+  </main>
+
+  <!-- Application Logic -->
+  <script src="app.js"></script>
+</body>
+</html>
